@@ -27,12 +27,21 @@ def rename_files(manga, chapter, arry)
 	FileUtils.mkdir_p("mangas/#{manga}/#{chapter}")
 
 	i = 0
-	while i < arry.length		
-		File.rename(arry[i], "#{manga} c#{chapter} p#{arry[i]}")
-		puts("renomeando arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}.")
+	while i < arry.length
+		begin
+			File.rename(arry[i], "#{manga} c#{chapter} p#{arry[i]}")
+			puts("renomeando arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}.")
+		rescue
+			puts "Não foi possivel renomear arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}."
+		end
 		
-		FileUtils.mv("#{manga} c#{chapter} p#{arry[i]}", "mangas/#{manga}/#{chapter}")
-		puts("movendo #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}.")
+		begin
+			FileUtils.mv("#{manga} c#{chapter} p#{arry[i]}", "mangas/#{manga}/#{chapter}")
+			puts("movendo #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}.")
+		rescue
+			puts "Não foi possivel  mover #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}."
+		end
+		
 		i += 1
 	end
 end
