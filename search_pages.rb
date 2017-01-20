@@ -1,7 +1,7 @@
 #Manga Host Downloader by Hermes Passer in 2017-01-13
 require 'net/http'
 
-class Pages
+class Search_Pages
 
 	def initialize(name, chapter)  
 		@name = name
@@ -43,7 +43,9 @@ class Pages
 	end
 
 	private def complete_pages(pages)
-		p = pages[0][pages[0].index("."), pages[0].length] # get page extension
+		unless pages.any? then return -1 end
+		
+		p = pages[0][pages[0].index("."), pages[0].length] # get page extension		
 		s = ""
 		
 		# if missing some page in the begin, so add him
