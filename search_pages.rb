@@ -10,8 +10,19 @@ class Search_Pages
 	end 
   
 	public def get_pages
-		# It receives a vector that in each position has a line of the html document
-		source = Net::HTTP.get('mangahost.net', "/manga/#{@name}/#{@chapter}")
+		begin
+			retries ||= 0
+			# It receives a vector that in each position has a line of the html document
+			source = Net::HTTP.get('mangahost.net', "/manga/#{@name}/#{@chapter}")
+	#		raise Errno::ETIMEDOUT, "Con error"
+		rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError #SystemCallError, StandardError
+			if (retries += 1) < 3 then retry
+			else
+				puts("Não foi possível estabelecer uma conexão com o servidor.")
+				return -1;
+			end
+		end
+		
 		source = source.split(/\n/) 
 		lines = Array.new # Receive the lines that save the pages
 		pages = Array.new # Receive the pages

@@ -17,7 +17,7 @@ class Downloader
 		Net::HTTP.start(url.host, url.port) do |http|
 			http.head(url.request_uri).code == '200'
 		end
-
+		#rescue TypeError
 		rescue false
 	end
 

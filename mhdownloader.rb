@@ -5,6 +5,7 @@ load 'search_pages.rb'
 load 'downloader.rb'
 require 'fileutils'
 
+VERSION = "0.8"
 def get_chapters(initial_chapter, final_chapter)
 	c = initial_chapter
 	arry = Array.new
@@ -31,15 +32,15 @@ def rename_files(manga, chapter, arry)
 		begin
 			File.rename(arry[i], "#{manga} c#{chapter} p#{arry[i]}")
 			puts("renomeando arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}.")
-		rescue
-			puts "Não foi possivel renomear arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}."
+		rescue Exception => e
+			puts "Não foi possivel renomear arquivo #{arry[i]} para #{manga} c#{chapter} p#{arry[i]}.\nErro #{e}"
 		end
 		
 		begin
 			FileUtils.mv("#{manga} c#{chapter} p#{arry[i]}", "mangas/#{manga}/#{chapter}")
 			puts("movendo #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}.")
-		rescue
-			puts "Não foi possivel  mover #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}."
+		rescue Exception => ee
+			puts "Não foi possivel  mover #{manga} c#{chapter} p#{arry[i]} para mangas/#{manga}/#{chapter}.\nErro #{ee}"
 		end
 		
 		i += 1
@@ -61,15 +62,18 @@ def download_one(manga, chapter)
 end
 
 def download_multiple(manga, arry_chapters)
+	puts("Pegando capitulos intermediários...")
 	arry_chapters.each do |c|
 		download_one(manga,c)
 	end
 end
 
-puts("\n\n\t\tManga Host Downloader 0.1\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
+puts("\n\n\t\tManga Host Downloader #{VERSION}\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
 loop = true
 
 while loop
+	Gem.win_platform? ? (system "cls") : (system "clear")
+	puts("\n\n\t\tManga Host Downloader 0.4\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
 	puts("\tO que deseja fazer? \n\t\t1 - baixar um capítulo\n\t\t2 - baixar vários capitulos\n\t\t3 - notas\n\t\t4 - sair\n\n")
 	input = gets.chomp!
 	if input == "1"
@@ -83,23 +87,26 @@ while loop
 			next
 		end
 
-		download_one(manga.downcase.gsub(" ","-").strip, chapter)
+		manga = manga.downcase.gsub(" ", "-").gsub("(", "").gsub(")", "").strip
+		download_one(manga, chapter)
 	elsif input == "2"
 		print("Não serão aceitos capitulos que não tenham o seu nome em formato numerico.\nDigite o nome do manga exatamente como está no mangahost: ")
 		manga = gets.chomp!
 		print("Digite número do capitulo inicial: ")
-		chaptinit = gets.chomp!
+		chapinit = gets.chomp!
 		print("Digite número do capitulo final: ")
-		chaptend = gets.chomp!
+		chapend = gets.chomp!
 		
-		if (manga == "" || chaptinit == "" || chaptend == "")
+		if (manga == "" || chapinit == "" || chapend == "")
 			puts("Os campos não devem estar em branco!")
 			next
 		end
-
-		download_multiple(manga.downcase.gsub(" ","-").strip, get_chapters(chaptinit.to_f, chaptend.to_f))
+		
+		manga = manga.downcase.gsub(" ", "-").gsub("(", "").gsub(")", "").strip
+		download_multiple(manga, get_chapters(chapinit.to_f, chapend.to_f))
 	elsif input == "3"
-		puts("\n\nManga Host Downloader 0.5\nPor Hermes Passer - gladiocitrico.blogspot.com")
+		puts("\n\nManga Host Downloader #{VERSION}\nPor Hermes Passer - gladiocitrico.blogspot.com")
+		gets
 	elsif input == "4"
 		loop = false
 	end
