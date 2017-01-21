@@ -9,7 +9,7 @@ class Downloader
 
 	def initialize(url, page_name)
 		download_image(url, page_name)
-	end 
+	end
 	
 	private def url_exits(url_str)
 		url = URI.parse(url_str)
