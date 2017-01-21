@@ -101,7 +101,7 @@ while loop
 			puts("Os campos não devem estar em branco!")
 			next
 		end
-		
+		 
 		manga = manga.downcase.gsub(" ", "-").gsub("(", "").gsub(")", "").strip
 		download_multiple(manga, get_chapters(chapinit.to_f, chapend.to_f))
 	elsif input == "3"

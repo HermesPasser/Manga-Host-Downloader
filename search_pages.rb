@@ -7,8 +7,8 @@ class Search_Pages
 		@name = name
 		@chapter = chapter
 		get_pages
-	end 
-  
+	end
+	
 	public def get_pages
 		begin
 			retries ||= 0
