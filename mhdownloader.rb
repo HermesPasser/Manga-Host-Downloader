@@ -5,7 +5,7 @@ load 'search_pages.rb'
 load 'downloader.rb'
 require 'fileutils'
 
-VERSION = "0.8"
+VERSION = "0.9"
 def get_chapters(initial_chapter, final_chapter)
 	c = initial_chapter
 	arry = Array.new
@@ -68,13 +68,11 @@ def download_multiple(manga, arry_chapters)
 	end
 end
 
-puts("\n\n\t\tManga Host Downloader #{VERSION}\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
-loop = true
 
-while loop
+while true
 	Gem.win_platform? ? (system "cls") : (system "clear")
-	puts("\n\n\t\tManga Host Downloader 0.4\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
-	puts("\tO que deseja fazer? \n\t\t1 - baixar um capítulo\n\t\t2 - baixar vários capitulos\n\t\t3 - notas\n\t\t4 - sair\n\n")
+	puts("\n\n\t\tManga Host Downloader #{VERSION}\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
+	puts("\tO que deseja fazer? \n\t\t1 - baixar um capítulo\n\t\t2 - baixar vários capitulos\n\t\t3 - sair\n\n")
 	input = gets.chomp!
 	if input == "1"
 		print("Digite o nome do manga exatamente como está no mangahost: ")
@@ -101,13 +99,10 @@ while loop
 			puts("Os campos não devem estar em branco!")
 			next
 		end
-		
 		manga = manga.downcase.gsub(" ", "-").gsub("(", "").gsub(")", "").strip
 		download_multiple(manga, get_chapters(chapinit.to_f, chapend.to_f))
+
 	elsif input == "3"
-		puts("\n\nManga Host Downloader #{VERSION}\nPor Hermes Passer - gladiocitrico.blogspot.com")
-		gets
-	elsif input == "4"
-		loop = false
+		break
 	end
 end
