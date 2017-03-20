@@ -109,7 +109,7 @@ def finish_operation(manga)
 	gets
 end
 
-def use_multithreading?(is_multiple)
+def use_multithreading?
 	printlog("Usar multi-threading? (s/n)")
 	usemt = gets.chomp!
 	@start = Time.now
