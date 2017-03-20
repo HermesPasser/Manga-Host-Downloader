@@ -1,5 +1,4 @@
-#Manga Host Downloader by Hermes Passer in 2017-01-13
-require 'net/http'
+#Manga Host Downloader by Hermes Passer in 2017-03-20
 
 class Search_Pages
 
@@ -18,7 +17,7 @@ class Search_Pages
 		rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError #SystemCallError, StandardError
 			if (retries += 1) < 3 then retry
 			else
-				puts("Não foi possível estabelecer uma conexão com o servidor.")
+				putslog("Não foi possível estabelecer uma conexão com o servidor.")
 				return -1;
 			end
 		end

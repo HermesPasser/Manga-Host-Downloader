@@ -1,7 +1,6 @@
-#Manga Host Downloader by Hermes Passer in 2017-01-13
+#Manga Host Downloader by Hermes Passer in 2017-03-20
 
 require 'open-uri'
-require 'net/http'
 
 MHDIR = "http://img.mangahost.net/br/mangas_files/"
 
@@ -30,7 +29,7 @@ class Downloader
 			open(page_name, 'wb') do |file|
 				file << open(url).read
 			end
-			puts("baixado: #{url}.")
+			putslog("baixado: #{url}.")
 		end
 	end
 end
