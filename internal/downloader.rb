@@ -11,8 +11,17 @@ class Downloader
 	end
 	
 	private def url_exits(url_str)
-		url = URI.parse(url_str)
-	  
+		
+		begin
+			retries ||= 0
+			url = URI.parse(url_str)
+		rescue Exception => e
+			if (retries += 1) < 3 then retry
+			else
+				putslog("Não foi possível estabelecer uma conexão com o servidor.")
+				return -1;
+			end
+		end
 		Net::HTTP.start(url.host, url.port) do |http|
 			http.head(url.request_uri).code == '200'
 		end
