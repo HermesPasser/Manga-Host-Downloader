@@ -1,6 +1,6 @@
 # encoding: utf-8
-#Manga Host Downloader
-#by Hermes Passer in 2017-03-20
+# Manga Host Downloader
+# by Hermes Passer in 2017-03-20
 
 require 'fileutils'
 require 'net/http'
@@ -10,7 +10,7 @@ load 'external/updatewp.rb'
 load 'internal/search_pages.rb'
 load 'internal/downloader.rb'
 
-VERSION = "1.2"
+VERSION = "1.3"
 @directory = ""
 @log = ""
 
@@ -159,7 +159,7 @@ while true
 	Gem.win_platform? ? (system "cls") : (system "clear")
 	
 	putslog("\n\n\t\tManga Host Downloader #{VERSION}\n\tpor Hermes Passer - gladiocitrico.blogspot.com")
-	putslog("\tO que deseja fazer? \n\t\t1 - baixar um capítulo\n\t\t2 - baixar vários capitulos\n\t\t3 - atualizar\n\t\t4 - Alterar diretório padrão\n\t\t5 - sair\n\n")
+	putslog("\tO que deseja fazer? \n\t\t1 - baixar um capítulo\n\t\t2 - baixar vários capitulos\n\t\t3 - alterar diretório padrão\n\t\t4 - atualizar\n\t\t5 - sair\n\n")
 	input = getslog.chomp!
 	@log = ""
 	
@@ -194,20 +194,6 @@ while true
 		download_multiple(manga, get_chapters(chapinit.to_f, chapend.to_f), use_multithreading?)
 		finish_operation(manga)
 	elsif input == "3"
-		up = Hermes::Update::UpdateByWebPage.new("mhdownloader", VERSION, "gladiocitrico.blogspot.com.br/p/update.html")
-		if up.update_is_avaliable	
-			if up.update
-				puts("Atualização baixada com sucesso! Por favor, delete tudo o que está na pasta onde o programa está instalado e desconpacte o arquivo master.zip.")
-			else
-				puts("Não foi possível baixar a atualização, verifique sua conexão com a internet e tente novamente ou baixe direto do site.")
-			end
-		else
-			puts("Seu programa está atualizado.")
-		end
-		puts("Tecle enter para continuar...")
-		gets
-	elsif input == "4"
-		
 		puts("Escreva o caminho que você quer que seus mangás sejam salvos.\nDeixe vazio para que o diretorio padráo seja o diretório do programa.")
 		
 		while true
@@ -228,6 +214,19 @@ while true
 		end
 		
 		update_directory
+	elsif input == "4"
+		up = Hermes::Update::UpdateByWebPage.new("mhdownloader", VERSION, "gladiocitrico.blogspot.com.br/p/update.html")
+		if up.update_is_avaliable	
+			if up.update
+				puts("Atualização baixada com sucesso! Por favor, delete tudo o que está na pasta onde o programa está instalado e desconpacte o arquivo master.zip.")
+			else
+				puts("Não foi possível baixar a atualização, verifique sua conexão com a internet e tente novamente ou baixe direto do site.")
+			end
+		else
+			puts("Seu programa está atualizado.")
+		end
+		puts("Tecle enter para continuar...")
+		gets
 	elsif input == "5"
 		break
 	end
