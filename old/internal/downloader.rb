@@ -34,11 +34,12 @@ class Downloader
 			url = url.gsub("mangas_files","images")
 		end
 		
-		if (url_exits(url))
+		# if (url_exits(url))
 			open(page_name, 'wb') do |file|
 				file << open(url).read
 			end
 			putslog("baixado: #{url}.")
-		end
+		# end
+		# puts "#{url}     #{page_name}"
 	end
 end

@@ -1,4 +1,5 @@
 #Manga Host Downloader by Hermes Passer in 2017-03-20
+require 'open-uri' 
 
 class Search_Pages
 
@@ -12,7 +13,7 @@ class Search_Pages
 		begin
 			retries ||= 0
 			# It receives a vector that in each position has a line of the html document
-			source = Net::HTTP.get('mangahost.net', "/manga/#{@name}/#{@chapter}")
+			source = open("http://mangahost.net/manga/#{@name}/#{@chapter}").read#Net::HTTP.get('mangahost.net', "/manga/#{@name}/#{@chapter}")
 	#		raise Errno::ETIMEDOUT, "Con error"
 		rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError #SystemCallError, StandardError
 			if (retries += 1) < 3 then retry
@@ -34,14 +35,14 @@ class Search_Pages
 		end
 		
 		lines.each do |i|
-			if i.include? "#{@name}\\/#{@chapter}\\/"
+			if i.include? "#{@name}\\/#{@chapter}\\/"				
 				i = i.gsub("#{@name}\\/#{@chapter}\\/","$")
 				i = i.gsub("\"}","*")
 				i = i[i.index("$") + 1, i.length]
 				i = i[0, i.index("*")]
 				pages.push(i)
 			
-			elsif i.include? "#{@name}/#{@chapter}/"
+			elsif i.include? "#{@name}/#{@chapter}/"				
 				i = i.gsub("#{@name}/#{@chapter}/","$")
 				i = i.gsub("' alt","*")
 				i = i[i.index("$") + 1, i.length]
