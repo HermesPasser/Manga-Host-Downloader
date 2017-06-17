@@ -1,2 +1,0 @@
-ruby mhdownloader.rb
-@pause

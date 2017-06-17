@@ -23,22 +23,30 @@ module MDownloader
 		
 		def get_page_links; raise "This method is abstract."; end
 		
-        def getHtml(page)
-            begin
+		def acess_url
+		    begin
                 retries ||= 0
-                return Net::HTTP.get(@domain, page) # It receives a vector that in each position has a line of the html document
-            rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError
+                yield
+            rescue Timeout::Error, Errno::ETIMEDOUT, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => detail
                 if (retries += 1) < 3 then retry
-                else return false;
+                else 
+					puts(detail.backtrace)
+					return false;
                 end
             end
+		end
+		
+        def getHtml(page)
+            acess_url {return Net::HTTP.get(@domain, page)} # It receives a vector that in each position has a line of the html document  
         end
          
 		#Removed page extencion => 15/6
         def download_image(url, page_name)
-            File.open("#{@path_to_download}\\#{page_name}", 'wb') do |f|
-                f.write open("http://#{url}").read
-            end
+			acess_url do
+				File.open("#{@path_to_download}\\#{page_name}", 'wb') do |f|
+					f.write open("http://#{url}").read
+				end
+			end
         end
     end
 end

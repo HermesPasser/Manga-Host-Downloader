@@ -20,14 +20,7 @@ module MDownloader
 
 		#Override
 		def getHtml(page)
-            begin
-                retries ||= 0
-                return open("http://#{@domain}#{page}").read
-            rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError
-                if (retries += 1) < 3 then retry
-                else return false;
-                end
-            end
+            acess_url {return open("http://#{@domain}#{page}").read}
         end
 
 		# Cria um vetor com os endereços das pgs
@@ -89,12 +82,12 @@ module MDownloader
 				threads << Thread.new{
 					i += 1
 					download_image(imagelink, "#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{ex}")
-					print($LOG += "\nDownloaded: #{imagelink} in #{@path_to_download}\\#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{ex}")
+					print("\nDownloaded: #{imagelink} in #{@path_to_download}\\#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{ex}")
 				}
 			end
 			
 			threads.each(&:join)
-			print($LOG += "\nDownload complete.")
+			print("\nDownload complete.")
 		end	
 	end
 end
