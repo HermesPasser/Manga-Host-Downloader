@@ -6,7 +6,7 @@ require 'thread'
 load 	'external/updatewp.rb'
 include MDownloader
 
-VERSION = "1.5"; manga = chap = path = ""; dont_execute = false
+VERSION = "1.6"; manga = chap = path = ""; dont_execute = false
 
 def set_directory(dir)
 	puts("Diretório padrão alterado com sucesso.\nPara reverte-lo para a pasta atual, use o comando sem especificar o caminho.")
@@ -35,6 +35,8 @@ end
 def printlogo
 	puts "\t    Manga Host Downloader #{VERSION} Command Line"
 	puts "\tby Hermes Passer (gladiocitrico.blogspot.com)"
+	puts "\n\tEste programa está desatualizado, é recomendável usar o Hermes Manga Downloader em"
+	puts "\thermespasser.github.io/pages/hermesmangadownloader.html"
 end
 
 def printhelp
@@ -86,7 +88,7 @@ else
 	
 	if !dont_execute && MDownloader::Mangahost.url_page_exits?("mangahost.me", "/manga/#{manga}/")
 		start = Time.now
-		 
+		
 		mhd = Mangahost.new(path, manga, chap)
 		mhd.download_chapter
 		
