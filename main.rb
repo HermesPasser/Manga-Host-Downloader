@@ -35,8 +35,6 @@ end
 def printlogo
 	puts "\t    Manga Host Downloader #{VERSION} Command Line"
 	puts "\tby Hermes Passer (gladiocitrico.blogspot.com)"
-	puts "\n\tEste programa está desatualizado, é recomendável usar o Hermes Manga Downloader em"
-	puts "\thermespasser.github.io/pages/hermesmangadownloader.html"
 end
 
 def printhelp
