@@ -1,0 +1,2 @@
+ruby macro.rb
+pause

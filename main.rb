@@ -1,8 +1,7 @@
 # encoding: utf-8
-# By Hermes Passer in 11/06/2017
+# By Hermes Passer in 02/11/2017
 require_relative 'mdownloader/mhdownloader.rb'
 require 'fileutils'
-require 'thread'
 load 	'external/updatewp.rb'
 include MDownloader
 

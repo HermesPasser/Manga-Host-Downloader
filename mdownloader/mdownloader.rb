@@ -33,8 +33,8 @@ module MDownloader
             rescue Timeout::Error, Errno::ETIMEDOUT, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => detail
                 if (retries += 1) < 3 then retry
                 else 
-					puts(detail.backtrace)
-					return false;
+					puts("\nNão foi possível baixar esse capítulo. Verifique a conexão e tente novamente.")
+					exit(true)
                 end
             end
 		end
