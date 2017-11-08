@@ -1,2 +1,2 @@
 ruby macro.rb
-pause
+cmd

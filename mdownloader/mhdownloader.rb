@@ -50,6 +50,7 @@ module MDownloader
 					indx = i.index("src='") + 5
 					i = i[indx, i.index("' alt") - indx]
 					i = i.gsub('https://', '')
+					i = URI.encode(i)
 					pages.push(i)
 				else
 					puts('Não foi possível baixar esse capítulo. Verifique se escreveu as informações corretamente e se o programa está atualizado.')
@@ -72,6 +73,7 @@ module MDownloader
 				i = i.gsub("\\/", "/")
 				i = i[i.index("https:"), i.length].gsub("https://", "")
 				i = i[0, i.index("\"}")]
+				i = URI.encode(i)
 				pages.push(i)
 			end
 			return pages
@@ -94,6 +96,7 @@ module MDownloader
 		# Download all chapters of the manga
 		def download_chapter
 			webpages = acess_url{get_page_links}
+			
 			extension = File.extname(webpages[0]) 
 			threads = []
 			i = 0
@@ -108,7 +111,7 @@ module MDownloader
 			end
 			
 			threads.each(&:join)
-			print("\nDownload completo. ")
+			print("\nDownload completo.")
 		end
 	end
 end
