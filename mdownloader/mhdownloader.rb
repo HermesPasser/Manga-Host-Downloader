@@ -97,14 +97,20 @@ module MDownloader
 		def download_chapter
 			webpages = acess_url{get_page_links}
 			
-			extension = File.extname(webpages[0]) 
+			# extension = File.extname(webpages[0]) # to rename each page with a default name
 			threads = []
 			i = 0
-
+			
+			# In the future, add a token to swich the save mode of with default name to the original name and vice versa
 			webpages.each do |imagelink| 
 				threads << Thread.new{
-					i += 1
-					path = "#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{extension}"
+					# To save with a default name of the file
+					# i += 1
+					# path = "#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{extension}"
+					
+					# To save with the original name of the file
+					path = File.basename(imagelink)
+					
 					acess_url{download_image(imagelink, path)}
 					print("\nDownloaded: #{imagelink} in #{path}")
 				}

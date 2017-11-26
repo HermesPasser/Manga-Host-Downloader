@@ -5,7 +5,7 @@ require 'fileutils'
 load 	'external/updatewp.rb'
 include MDownloader
 
-VERSION = "1.7"; manga = chap = path = ""; dont_execute = false
+VERSION = "1.8"; manga = chap = path = ""; dont_execute = false
 
 def set_directory(dir)
 	puts("Diretório padrão alterado com sucesso.\nPara reverte-lo para a pasta atual, use o comando sem especificar o caminho.")
