@@ -8,7 +8,7 @@ module MDownloader
 		
 		def initialize(path, manga, chapter)
 			super(path, manga, "", chapter)
-			@domain 	= "mangashost.com"
+			@domain 	= "mangahost.cc"
 			@old_patern = "#{@manga_name}\\/#{@manga_chapter}\\/"
 			@new_patern = "#{@manga_name}/#{@manga_chapter}/"
 		end
@@ -25,77 +25,28 @@ module MDownloader
             acess_url {return open("http://#{@domain}#{page}").read}
         end
 		
-		# Returns the index with an text in the array
-		def get_line(array, text)
-			array.each { |i| if i.include? text then return i end }
-			return nil
-		end
-		
-		def page_links_new_reader(source)
-			source = source.split(/\n/)
-			pages = []	
-			
-			# Get the string with the array of <a> tags in <script> tag
-			lines = (get_line(source, "var images")).split(/id/)
-			
-			# Add the first 1 and 2 <a> tags in lines. gsub cause below the tags use simple quotes
-			lines.insert(1, get_line(source, "id=\"img_1\"").gsub("\"", "'"))
-			lines.insert(2, get_line(source, "id=\"img_2\"").gsub("\"", "'"))
-			
-			# Get the links
-			lines.each do |i|
-				if not i.include? @new_patern then next end
-				
-				if i.include? "src='" and i.include? "' alt" 
-					indx = i.index("src='") + 5
-					i = i[indx, i.index("' alt") - indx]
-					i = i.gsub('https://', '')
-					i = URI.encode(i)
-					pages.push(i)
-				else
-					puts('Não foi possível baixar esse capítulo. Verifique se escreveu as informações corretamente e se o programa está atualizado.')
-					exit(true)
-				end	
-			end
-			return pages
-		end
-		
-		def page_links_old_reader(source)
-			pages = []
-			
-			# Get the string with the array of objects in <script> tag
-			lines = (get_line(source.split(/\n/), "var pages")).split(/id/)
-			
-			# Get the links
-			lines.each do |i|
-				if not i.include? @old_patern then next end
-				
-				i = i.gsub("\\/", "/")
-				i = i[i.index("https:"), i.length].gsub("https://", "")
-				i = i[0, i.index("\"}")]
-				i = URI.encode(i)
-				pages.push(i)
-			end
-			return pages
-		end
-		
 		# Get a array with manga image links
 		def get_page_links
+			pages = []
 			source = getHtml("/manga/#{@manga_name}/#{@manga_chapter}")
 			
-			if source.include? "var pages"
-				return page_links_old_reader(source)
-			elsif source.include? "var images"
-				return page_links_new_reader(source)
-			else
-				puts('Não foi possível baixar esse capítulo. Verifique se escreveu as informações corretamente e se o programa está atualizado.')
-				exit(true)
+			# Get the links in <script> tag
+			source = source.match(/(pages = |images = ).*(?<=\])/).to_s
+			source = source.scan(/(?=src='|"url\":\")(.*?)(images|mangas_files)(.*?)(?<='|")/)
+			source.each do |page| # Não to pegrando o do pag mas aparentemente ta funcionando mesmo assim
+				page = page[0] + page[1] + page[2]
+				page = page.gsub("src=", '').gsub("'", '')
+				page = page.gsub("\"url\":\"", '').gsub("\"", '')
+				page = page.gsub("\\/", '/').gsub("https://", '')#
+				pages.push(page)
 			end
+			
+			return pages
 		end
 		
 		# Download all chapters of the manga
 		def download_chapter
-			webpages = acess_url{get_page_links}
+			webpages = acess_url{get_page_links}			
 			
 			# extension = File.extname(webpages[0]) # to rename each page with a default name
 			threads = []

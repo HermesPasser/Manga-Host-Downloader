@@ -44,7 +44,7 @@ module MDownloader
         end
          
 		# Removed page extension => 15/6
-        def download_image(url, page_name)		
+        def download_image(url, page_name)	
 			acess_url do
 				File.open("#{@path_to_download}\\#{page_name}", 'wb') do |f|
 					f.write(open("http://#{url}").read)
