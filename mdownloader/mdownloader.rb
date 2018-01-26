@@ -47,7 +47,12 @@ module MDownloader
         def download_image(url, page_name)	
 			acess_url do
 				File.open("#{@path_to_download}\\#{page_name}", 'wb') do |f|
-					f.write(open("http://#{url}").read)
+					begin 
+						f.write(open("http://#{url}").read)
+					rescue URI::InvalidURIError
+						puts "Não é possível baixar páginas com caracteres não válidos como: \n#{url}\n\n"
+						exit(0)
+					end
 				end
 			end
         end

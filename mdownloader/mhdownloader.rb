@@ -38,6 +38,7 @@ module MDownloader
 				page = page.gsub("src=", '').gsub("'", '')
 				page = page.gsub("\"url\":\"", '').gsub("\"", '')
 				page = page.gsub("\\/", '/').gsub("https://", '')#
+				page = URI.encode(page) # depreciated
 				pages.push(page)
 			end
 			
