@@ -86,9 +86,6 @@ if manga == "" && chap == ""
 	end
 else
 	
-	puts $mhdomain
-	exit 0
-	
 	if path == "" then path = get_directory(path) end
 	path = "#{path}\\mangas\\#{manga}_#{chap}"
 	FileUtils.mkdir_p(path)
