@@ -8,7 +8,7 @@ module MDownloader
 		
 		def initialize(path, manga, chapter)
 			super(path, manga, "", chapter)
-			@domain 	= "mangahost.cc"
+			@domain 	= $mhdomain || "mangahost-br.com"
 			@old_patern = "#{@manga_name}\\/#{@manga_chapter}\\/"
 			@new_patern = "#{@manga_name}/#{@manga_chapter}/"
 		end
@@ -22,7 +22,7 @@ module MDownloader
 
 		#Override
 		def getHtml(page)
-            acess_url {return open("http://#{@domain}#{page}").read}
+            acess_url {return open("http://#{@domain}/#{page}").read}
         end
 		
 		# Get a array with manga image links

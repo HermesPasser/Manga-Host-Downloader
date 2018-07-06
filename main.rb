@@ -1,11 +1,17 @@
 # encoding: utf-8
-# By Hermes Passer in 02/11/2017
+# By Hermes Passer in 2017/11/02
 require_relative 'mdownloader/mhdownloader.rb'
 require 'fileutils'
 load 	'external/updatewp.rb'
 include MDownloader
 
-VERSION = "2.0"; manga = chap = path = ""; dont_execute = false
+#-----------------------------------------------------------------------
+# ALTERE ESSA LINHA PARA O ATUAL URL DO MANGAHOST CASO ELE TENHA MUDADO
+#-----------------------------------------------------------------------
+$mhdomain = 'mangahost-br.com'
+#-----------------------------------------------------------------------
+
+VERSION = "2.2"; manga = chap = path = ""; dont_execute = false
 
 def set_directory(dir)
 	puts("Diretório padrão alterado com sucesso.\nPara reverte-lo para a pasta atual, use o comando sem especificar o caminho.")
@@ -39,10 +45,11 @@ end
 def printhelp
 	puts "\nVeja a imagem about.pgn para saber mais sobre como pegar o nome e capítulo do manga:"
 	puts "\n\nArgumentos:"
-	puts "\tPara download: m:[nome_manga], c:[nome_capítulo], p:[pasta_destino] (opcional)."
+	puts "\tPara download: m:[nome_manga] c:[nome_capítulo] p:[pasta_destino] (opcional) l:[dominio] (opcional*)"
 	puts "\tAlterar diretório padrão: d:"
 	puts "\tAtualizar: u:"
 	puts "\tAjuda: h:"
+	puts "\n\t*: o dominio dirá para o programa qual o url em que ele deve buscar os arquivos, já que o url do manga host muda de tempos em tempos. Não adicione o protocolo (http://, https://) ou o caminho do manga (/manga/nomedomanga/pagina)" 
 end
 
 printlogo
@@ -69,6 +76,7 @@ ARGV.each do |arg|
 	when "m:" then manga = arg[2, arg.length]
 	when "c:" then chap  = arg[2, arg.length]
 	when "p:" then path  = arg[2, arg.length]
+	when "l:" then $mhdomain = arg[2, arg.length]
 	end
 end
 
@@ -78,12 +86,15 @@ if manga == "" && chap == ""
 	end
 else
 	
+	puts $mhdomain
+	exit 0
+	
 	if path == "" then path = get_directory(path) end
 	path = "#{path}\\mangas\\#{manga}_#{chap}"
 	FileUtils.mkdir_p(path)
 	
 	
-	if !dont_execute && MDownloader::Mangahost.url_page_exits?("mangahost.me", "/manga/#{manga}/")
+	if !dont_execute && MDownloader::Mangahost.url_page_exits?($mhdomain, "/manga/#{manga}/")
 		start = Time.now
 		
 		mhd = Mangahost.new(path, manga, chap)
@@ -95,6 +106,6 @@ else
 		s = (time_total - (h * 60 * 60) - (m * 60))
 		dt = Time.now.strftime("%d-%m-%Y-%H-%M")
 		print("Terminado em #{h} horas, #{m} minutos e #{s} segundos.")
-	else puts "\"mangahost.me/manga/#{manga}/\" não pode ser encontrado"
+	else puts "\"#{$mhdomain}/manga/#{manga}/\" não pode ser encontrado"
 	end
 end
