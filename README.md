@@ -1,4 +1,4 @@
-![Mangafox downloader logo (a page of manga).](https://raw.githubusercontent.com/HermesPasser/MangaFox-Downloader/master/app-icon.png)
+![Mangafox downloader logo (a page of manga).](https://raw.githubusercontent.com/HermesPasser/MangaFox-Downloader/master/app-icon.png)   
 Download mangas from the brazilian's site Manga Host.
 
 **NOTE: This program will not be updated anymore.**
