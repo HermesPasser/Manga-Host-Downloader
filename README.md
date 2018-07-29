@@ -1,13 +1,3 @@
-# Manga Host Downloader
-Download from mangahost.net site.
-
-Uses ruby 2.4
-
-Type h: to help in command line
-
-NOTE: This program will not be updated anymore
-
-
 ![Mangafox downloader logo (a page of manga).](https://raw.githubusercontent.com/HermesPasser/MangaFox-Downloader/master/app-icon.png)
 Download mangas from the brazilian's site Manga Host.
 
