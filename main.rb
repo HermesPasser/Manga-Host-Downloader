@@ -8,10 +8,10 @@ include MDownloader
 #-----------------------------------------------------------------------
 # ALTERE ESSA LINHA PARA O ATUAL URL DO MANGAHOST CASO ELE TENHA MUDADO
 #-----------------------------------------------------------------------
-$mhdomain = 'mangahost-br.com'
+$mhdomain = 'mangahost-br.cc'
 #-----------------------------------------------------------------------
 
-VERSION = "2.2"; manga = chap = path = ""; dont_execute = false
+VERSION = "2.3"; manga = chap = path = ""; dont_execute = false
 
 def set_directory(dir)
 	puts("Diretório padrão alterado com sucesso.\nPara reverte-lo para a pasta atual, use o comando sem especificar o caminho.")
@@ -45,7 +45,7 @@ end
 def printhelp
 	puts "\nVeja a imagem about.pgn para saber mais sobre como pegar o nome e capítulo do manga:"
 	puts "\n\nArgumentos:"
-	puts "\tPara download: m:[nome_manga] c:[nome_capítulo] p:[pasta_destino] (opcional) l:[dominio] (opcional*)"
+	puts "\tPara download: m:[nome_manga] c:[nome_capítulo] p:[pasta_destino] (opcional) l:[dominio] (opcional)"
 	puts "\tAlterar diretório padrão: d:"
 	puts "\tAtualizar: u:"
 	puts "\tAjuda: h:"
@@ -102,7 +102,7 @@ else
 		m = ((time_total - (h * 60 * 60)) / 60).to_i
 		s = (time_total - (h * 60 * 60) - (m * 60))
 		dt = Time.now.strftime("%d-%m-%Y-%H-%M")
-		print("Terminado em #{h} horas, #{m} minutos e #{s} segundos.")
+		print("Terminado em #{h} horas, #{m} minutos e #{s.round(2)} segundos.")
 	else puts "\"#{$mhdomain}/manga/#{manga}/\" não pode ser encontrado"
 	end
 end

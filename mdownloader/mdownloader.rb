@@ -13,27 +13,31 @@ module MDownloader
             @manga_volume     = vol
             @manga_chapter    = chapter
             @domain           = ""
+			@agent			  = ""
         end
      
 		# Added acess_url call => 02/11
         def self.url_page_exits?(domain, page)
 			md = MangaDownloader.new('', '', '', '')
-            md.acess_url {Net::HTTP.get(domain, page) != ""}
+            md.acess_url {Net::HTTP.get(domain, page) != ''}
         end
 		
-        def get_cover; raise "This method is abstract."; end
+        def get_cover; raise 'This method is abstract.'; end
 		
-		def get_page_links; raise "This method is abstract."; end
+		def get_page_links; raise 'This method is abstract.'; end
 		
 		# Added return in yield => 01/11
 		def acess_url
 		    begin
                 retries ||= 0
                 return yield
-            rescue Timeout::Error, Errno::ETIMEDOUT, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => detail
+            rescue Exception => detail # This is awful and dangerous. Maybe turn back to the previous solution?
                 if (retries += 1) < 3 then retry
                 else 
-					puts("\nNão foi possível baixar esse capítulo. Verifique a conexão e tente novamente.")
+					puts("\nNão foi possível baixar esse capítulo. Verifique a conexão e tente novamente. \nDeseja ver a mensagem de erro? S/N")
+					if $stdin.gets.chomp.downcase == 's'
+						puts(detail)
+					end
 					exit(true)
                 end
             end
@@ -44,11 +48,14 @@ module MDownloader
         end
          
 		# Removed page extension => 15/6
-        def download_image(url, page_name)	
+		# Added user agend => 16/8
+        def download_image(url, page_name) 
 			acess_url do
 				File.open("#{@path_to_download}\\#{page_name}", 'wb') do |f|
-					begin 
-						f.write(open("http://#{url}").read)
+					begin
+						# data = acess_url { open("http://#{url}", "User-Agent" => @agent).read }
+						# f.write(data)
+						f.write(open("http://#{url}", "User-Agent" => @agent).read)
 					rescue URI::InvalidURIError
 						puts "Não é possível baixar páginas com caracteres não válidos como: \n#{url}\n\n"
 						exit(0)

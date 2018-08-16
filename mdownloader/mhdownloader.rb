@@ -11,10 +11,11 @@ module MDownloader
 			@domain 	= $mhdomain || "mangahost-br.com"
 			@old_patern = "#{@manga_name}\\/#{@manga_chapter}\\/"
 			@new_patern = "#{@manga_name}/#{@manga_chapter}/"
+			@agent		= "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
 		end
 		
 		#reimplemented
-		def get_cover
+		def get_cover # onerror="javascript:this.src='//c.mfcdn.net/media/cover.jpg' da a entender que algumas imagens podem estar no endereco antigo
 			# Doesn't work with shoes
 			html = open("https://#{@domain}/manga/#{@manga_name}").read.gsub("<meta property=\"og:image\" content=\"", "~%#").gsub("\"/>", "~").split("~")
 			html.each { |line| if line.include?("%#") then print "finish"; return line.gsub("%#", "") end}
@@ -22,7 +23,10 @@ module MDownloader
 
 		#Override
 		def getHtml(page)
-            acess_url {return open("http://#{@domain}/#{page}").read}
+            acess_url do 
+				# senhores do mangahost, por favor parem de tentar quebrar esse humilde downloader.
+				return open("http://#{@domain}/#{page}", "User-Agent" => @agent).read
+			end
         end
 		
 		# Get a array with manga image links
@@ -47,7 +51,7 @@ module MDownloader
 		
 		# Download all chapters of the manga
 		def download_chapter
-			webpages = acess_url{get_page_links}			
+			webpages = acess_url{get_page_links}
 			
 			# extension = File.extname(webpages[0]) # to rename each page with a default name
 			threads = []
@@ -56,10 +60,6 @@ module MDownloader
 			# In the future, add a token to swich the save mode of with default name to the original name and vice versa
 			webpages.each do |imagelink| 
 				threads << Thread.new{
-					# To save with a default name of the file
-					# i += 1
-					# path = "#{@manga_name}_#{@manga_chapter}_#{i.to_s}#{extension}"
-					
 					# To save with the original name of the file
 					path = File.basename(imagelink)
 					
